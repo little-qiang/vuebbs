@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-9 topic-list">
-        <topic-list v-bind="{topics, pagination}"></topic-list>
+        <topic-list></topic-list>
       </div>
       <div class="col-lg-3 col-md-3 sidebar">
         <div class="panel panel-default">
@@ -20,7 +20,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import topicList from './topicList'
 import activeUsers from './activeUsers'
 import links from './links'
@@ -31,25 +30,6 @@ export default {
     topicList,
     activeUsers,
     links
-  },
-  data() {
-    return {
-      topics: [],
-      pagination: [],
-    }
-  },
-  created: function() {
-    this.renderTopics()
-  },
-  methods: {
-    renderTopics: function() {
-      axios.get('/api/topics?include=user,category').then((res) => {
-        if (res.status == 200) {
-          this.topics = res.data.data
-          this.pagination = res.data.meta.pagination
-        }
-      })
-    }
   }
 }
 
