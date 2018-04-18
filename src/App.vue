@@ -1,23 +1,24 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
+  <div id="app" class="root-page">
+    <common-header></common-header>
     <router-view/>
+    <common-footer></common-footer>
   </div>
 </template>
-
 <script>
-export default {
-  name: 'App'
-}
-</script>
+import commonHeader from '@/pages/layouts/header'
+import commonFooter from '@/pages/layouts/footer'
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+
+export default {
+  name: 'App',
+  components: {
+    commonHeader,
+    commonFooter
+  }
 }
+
+</script>
+<style lang="scss">
+@import "./assets/sass/app";
 </style>

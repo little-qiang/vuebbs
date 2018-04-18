@@ -1,6 +1,6 @@
 root = true
 
-[*]
+[*.{html,js,json,vue,sass,scss,less}]
 charset = utf-8
 indent_style = space
 indent_size = 2
