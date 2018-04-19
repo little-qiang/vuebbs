@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-9 topic-list">
-        <topic-list></topic-list>
+        <topic-list v-bind="{catId}"></topic-list>
       </div>
       <div class="col-lg-3 col-md-3 sidebar">
         <div class="panel panel-default">
@@ -26,10 +26,20 @@ import links from './links'
 
 export default {
   name: 'topics',
+  data() {
+    return {
+      catId: 0
+    }
+  },
   components: {
     topicList,
     activeUsers,
     links
+  },
+  watch: {
+    '$route' (to, from) {
+      this.catId = to.params.catId
+    }
   }
 }
 

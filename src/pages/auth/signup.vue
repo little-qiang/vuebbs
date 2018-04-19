@@ -1,50 +1,53 @@
 <template>
   <div class="container">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-          <div class="panel panel-default">
-            <div class="panel-heading">用户注册</div>
-            <div class="panel-body">
-              <form method="POST" action="http://larabbs.test/register" class="form-horizontal">
-                <input type="hidden" name="_token" value="7Br0j7v3cm7e5JBZs8XgEmIpKKAc2MQmZ5k1TPO4">
-                <div class="form-group">
-                  <label for="name" class="col-md-4 control-label">用户名</label>
-                  <div class="col-md-6">
-                    <input id="name" type="text" name="name" value="" required="required" autofocus="autofocus" class="form-control">
-                  </div>
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-heading">用户注册</div>
+          <div class="panel-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label for="name" class="col-md-4 control-label">手机号</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" v-model="phone">
                 </div>
-                <div class="form-group">
-                  <label for="email" class="col-md-4 control-label">E-Mail 地址</label>
-                  <div class="col-md-6">
-                    <input id="email" type="email" name="email" value="" required="required" class="form-control">
-                  </div>
+              </div>
+              <div v-show="step == 1" class="form-group ">
+                <label for="captcha" class="col-md-4 control-label">图片验证码</label>
+                <div class="col-md-6">
+                  <input class="form-control" v-model="captchaCode">
+                  <img :src="captchaImg" v-on:click="getCaptcha()" title="点击图片重新获取验证码" class="thumbnail captcha">
                 </div>
-                <div class="form-group">
-                  <label for="password" class="col-md-4 control-label">密 码</label>
-                  <div class="col-md-6">
-                    <input id="password" type="password" name="password" required="required" class="form-control">
-                  </div>
+              </div>
+              <div v-show="step == 2" class="form-group">
+                <label for="email" class="col-md-4 control-label">短信验证码</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" v-model="smsCode">
                 </div>
-                <div class="form-group">
-                  <label for="password-confirm" class="col-md-4 control-label">重复密码</label>
-                  <div class="col-md-6">
-                    <input id="password-confirm" type="password" name="password_confirmation" required="required" class="form-control">
-                  </div>
+              </div>
+              <div v-show="step == 2" class="form-group">
+                <label for="name" class="col-md-4 control-label">名称</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" v-model="name">
                 </div>
-                <div class="form-group ">
-                  <label for="captcha" class="col-md-4 control-label">验证码</label>
-                  <div class="col-md-6">
-                    <input id="captcha" name="captcha" class="form-control"> <img src="http://larabbs.test/captcha/flat?3PABNF3B" onclick="this.src='/captcha/flat?'+Math.random()" title="点击图片重新获取验证码" class="thumbnail captcha"></div>
+              </div>
+              <div v-show="step == 2" class="form-group">
+                <label for="password" class="col-md-4 control-label">密 码</label>
+                <div class="col-md-6">
+                  <input type="password" class="form-control" v-model="password">
                 </div>
-                <div class="form-group">
-                  <div class="col-md-6 col-md-offset-4">
-                    <button type="submit" class="btn btn-primary">
-                      注册 <i class="glyphicon glyphicon-arrow-right"></i></button>
-                  </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                  <button class="btn btn-info" v-on:click.prevent="verifyCaptchaCode">
+                    发送 <i class="glyphicon glyphicon-arrow-right"></i>
+                  </button>
+                  <button class="btn btn-primary" v-on:click.prevent="post">
+                    注册 <i class="glyphicon glyphicon-arrow-right"></i>
+                  </button>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -52,10 +55,54 @@
   </div>
 </template>
 <script>
-export default {}
+import axios from 'axios'
+
+export default {
+  data() {
+    return {
+      step: 1,
+      phone: '',
+      name: '',
+      password: '',
+      captchaImg: '',
+      captchaKey: '',
+      captchaCode: '',
+      smsKey: '',
+      smsCode: '',
+    }
+  },
+  methods: {
+    getCaptcha() {
+      axios.post('/api/captchas', { phone: this.phone }).then((res) => {
+        this.captchaImg = res.data.captcha_image_content
+        this.captchaKey = res.data.captcha_key
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    verifyCaptchaCode() {
+      let params = { captcha_key: this.captchaKey, captcha_code: this.captchaCode }
+      axios.post('/api/verificationCodes', params).then((res) => {
+        this.step = 2
+        this.smsKey = res.data.key
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    post() {
+      let params = {
+        verification_key: this.smsKey,
+        verification_code: this.smsCode,
+        password: this.password,
+        name: this.name,
+      }
+      axios.post('/api/users', params).then((res) => {
+        this.captchaImg = res.data.captcha_image_content
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+  }
+}
 
 </script>
-<style lang="scss" scoped>
-
-
-</style>

@@ -13,11 +13,11 @@
       <div id="app-navbar-collapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <ul class="nav navbar-nav">
-            <li><a href="http://larabbs.test/topics">话题</a></li>
-            <li><a href="http://larabbs.test/categories/1">分享</a></li>
-            <li><a href="http://larabbs.test/categories/2">教程</a></li>
-            <li><a href="http://larabbs.test/categories/3">问答</a></li>
-            <li><a href="http://larabbs.test/categories/4">公告</a></li>
+            <li><router-link to="/topics">话题</router-link></li>
+            <li><router-link to="/categories/1">分享</router-link></li>
+            <li><router-link to="/categories/2">教程</router-link></li>
+            <li><router-link to="/categories/3">问答</router-link></li>
+            <li><router-link to="/categories/4">公告</router-link></li>
           </ul>
         </ul>
         <ul class="nav navbar-nav navbar-right">

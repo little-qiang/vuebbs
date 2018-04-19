@@ -2,11 +2,11 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <ul class="nav nav-pills">
-        <li :class="{active: order == 'default'}">
-          <a v-on:click="switchOrder('default')">最后回复</a>
+        <li :class="{active: params.order == 'default'}">
+          <a v-on:click="params.order = 'default'">最后回复</a>
         </li>
-        <li :class="{active: order == 'recent'}">
-          <a v-on:click="switchOrder('recent')">最新发布</a>
+        <li :class="{active: params.order == 'recent'}">
+          <a v-on:click="params.order = 'recent'">最新发布</a>
         </li>
       </ul>
     </div>
@@ -55,11 +55,11 @@
         </template>
         <template v-else>
           <li>
-            <a v-on:click="refresh(pagination.current_page-1)">«</a>
+            <a v-on:click="params.page += 1">«</a>
           </li>
         </template>
         <li v-for="n in pagination.total_pages" :class="{active: n == pagination.current_page}">
-          <a v-on:click="refresh(n)">
+          <a v-on:click="params.page = n">
             {{n}}
           </a>
         </li>
@@ -70,7 +70,7 @@
         </template>
         <template v-else>
           <li>
-            <a v-on:click="refresh(pagination.current_page+1)">»</a>
+            <a v-on:click="params.page += 1">»</a>
           </li>
         </template>
       </ul>
@@ -81,39 +81,47 @@
 import axios from 'axios'
 
 export default {
+  props: ['catId'],
   data() {
     return {
       topics: [],
       pagination: [],
-      order: 'default',
-      curPage: 1,
+      params: {
+        category_id: 0,
+        page: 1,
+        order: 'default',
+        include: 'user,category'
+      }
     }
   },
   watch: {
-    order: function(newVal, oldval){
-      this.refresh(this.curPage, newVal)
+    catId: function(val, oldVal) {
+      this.params = {
+        category_id: val,
+        page: 1,
+        order: 'default',
+        include: 'user,category'
+      }
+    },
+    params: {
+      handler(val, oldVal) {
+        this.refresh()
+      },
+      deep: true
     }
   },
-  created(){
+  created() {
     this.refresh()
   },
   methods: {
-    switchOrder(order){
-      this.order = order
-    },
-    refresh(page = 1, order = 'default') {
+    refresh() {
       let url = '/api/topics'
-      let params = {
-        page: page,
-        include: 'user,category',
-        order: order
-      }
-      axios.get(url, {params}).then((res) => {
-        if (res.status == 200) {
-          this.topics = res.data.data
-          this.pagination = res.data.meta.pagination
-          this.curPage = res.data.meta.pagination.current_page
-        }
+      axios.get(url, { params: this.params }).then((res) => {
+        this.topics = res.data.data
+        this.pagination = res.data.meta.pagination
+        this.curPage = res.data.meta.pagination.current_page
+      }).catch((err) => {
+        console.log(err)
       })
     }
   }

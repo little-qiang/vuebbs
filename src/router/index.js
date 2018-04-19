@@ -8,10 +8,19 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'home',
+      component: Topics
+    },
+    {
+      path: '/topics',
+      name: 'topics',
+      component: Topics
+    },
+    {
+      path: '/categories/:catId',
+      name: 'categories',
       component: Topics
     },
     {
@@ -26,4 +35,3 @@ export default new Router({
     }
   ]
 })
-
