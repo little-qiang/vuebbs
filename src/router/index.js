@@ -32,6 +32,11 @@ export default new Router({
       path: '/signup',
       name: 'signup',
       component: Signup
+    },
+    {
+      path: '/users/:id',
+      name: 'users',
+      component: Topics
     }
   ]
 })

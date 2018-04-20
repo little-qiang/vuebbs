@@ -56,14 +56,10 @@ export default {
     }
   },
   methods: {
-    test(t){
-      this.$store.commit('setToken', t)
-    },
     signin(){
       axios.post('/api/authorizations', { username: this.email, password: this.password}).then((res) => {
         window.localStorage.setItem('token', res.data.access_token)
-        this.$store.dispatch('setToken', res)
-        // this.$router.push('/')
+        this.$router.push('/')
       }).catch((error) => {
         console.log(error)
       })
