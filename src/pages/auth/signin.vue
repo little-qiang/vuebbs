@@ -6,18 +6,17 @@
           <div class="panel panel-default">
             <div class="panel-heading">Login</div>
             <div class="panel-body">
-              <form method="POST" action="http://larabbs.test/login" class="form-horizontal">
-                <input type="hidden" name="_token" value="7Br0j7v3cm7e5JBZs8XgEmIpKKAc2MQmZ5k1TPO4">
+              <form class="form-horizontal">
                 <div class="form-group">
                   <label for="email" class="col-md-4 control-label">E-Mail Address</label>
                   <div class="col-md-6">
-                    <input id="email" type="email" name="email" value="" required="required" autofocus="autofocus" class="form-control" style="background-color: rgb(250, 255, 189) !important; box-shadow: none; color: rgb(0, 0, 0);">
+                    <input v-model="email" type="email" id="email" class="form-control" style="background-color: rgb(250, 255, 189) !important; box-shadow: none; color: rgb(0, 0, 0);">
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="password" class="col-md-4 control-label">Password</label>
                   <div class="col-md-6">
-                    <input id="password" type="password" name="password" required="required" class="form-control" style="background-color: rgb(250, 255, 189) !important; box-shadow: none; color: rgb(0, 0, 0);">
+                    <input v-model="password" type="password" id="password" class="form-control" style="background-color: rgb(250, 255, 189) !important; box-shadow: none; color: rgb(0, 0, 0);">
                   </div>
                 </div>
                 <div class="form-group">
@@ -31,11 +30,13 @@
                 </div>
                 <div class="form-group">
                   <div class="col-md-8 col-md-offset-4">
-                    <button type="submit" class="btn btn-primary">
+                    <button v-on:click.prevent="signin" class="btn btn-primary">
                       Login
-                    </button> <a href="http://larabbs.test/password/reset" class="btn btn-link">
-                                    Forgot Your Password?
-                                </a></div>
+                    </button>
+                    <a href="http://larabbs.test/password/reset" class="btn btn-link">
+                      Forgot Your Password?
+                    </a>
+                  </div>
                 </div>
               </form>
             </div>
@@ -46,10 +47,28 @@
   </div>
 </template>
 <script>
-export default {}
+import axios from 'axios'
+export default {
+  data(){
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    test(t){
+      this.$store.commit('setToken', t)
+    },
+    signin(){
+      axios.post('/api/authorizations', { username: this.email, password: this.password}).then((res) => {
+        window.localStorage.setItem('token', res.data.access_token)
+        this.$store.dispatch('setToken', res)
+        // this.$router.push('/')
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+  }
+}
 
 </script>
-<style lang="scss" scoped>
-
-
-</style>

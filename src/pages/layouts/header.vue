@@ -29,7 +29,15 @@
   </nav>
 </template>
 <script>
-export default {}
+import axios from 'axios'
+export default {
+  data(){
+    return {
+      token: '',
+      user: {}
+    }
+  }
+}
 
 </script>
 <style lang="scss" scoped>
