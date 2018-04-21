@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group">
                   <div class="col-md-8 col-md-offset-4">
-                    <button v-on:click.prevent="signin" class="btn btn-primary">
+                    <button v-on:click.prevent="signIn" class="btn btn-primary">
                       Login
                     </button>
                     <a href="http://larabbs.test/password/reset" class="btn btn-link">
@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   data(){
     return {
@@ -55,14 +55,19 @@ export default {
       password: ''
     }
   },
-  methods: {
-    signin(){
-      axios.post('/api/authorizations', { username: this.email, password: this.password}).then((res) => {
-        window.localStorage.setItem('token', res.data.access_token)
+  computed: {
+    ...mapGetters(['isSignIn']),
+  },
+  watch: {
+    isSignIn: function(val, oldVal){
+      if(val){
         this.$router.push('/')
-      }).catch((error) => {
-        console.log(error)
-      })
+      }
+    }
+  },
+  methods: {
+    signIn(){
+      this.$store.dispatch('signIn', { username: this.email, password: this.password })
     }
   }
 }

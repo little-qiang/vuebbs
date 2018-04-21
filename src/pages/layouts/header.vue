@@ -46,24 +46,24 @@
               <li class="dropdown">
                 <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">
                   <span class="user-avatar pull-left" style="margin-right: 8px; margin-top: -5px;">
-                    <img :src="user.avatar" width="30px" height="30px" class="img-responsive img-circle">
+                    <img :src="userInfo.avatar" width="30px" height="30px" class="img-responsive img-circle">
                   </span>
-                  {{user.name}}
+                  {{userInfo.name}}
                   <span class="caret"></span>
                 </a>
                 <ul role="menu" class="dropdown-menu">
                   <li>
-                    <router-link :to="{ name: 'users', params: { id: user.id }}">
+                    <router-link :to="{ name: 'users', params: { id: userInfo.id }}">
                       <span aria-hidden="true" class="glyphicon glyphicon-user"></span> 个人中心
                     </router-link>
                   </li>
                   <li>
-                    <router-link :to="{ name: 'edit', params: { id: user.id }}">
+                    <router-link :to="{ name: 'edit', params: { id: userInfo.id }}">
                       <span aria-hidden="true" class="glyphicon glyphicon-edit"></span>编辑资料
                     </router-link>
                   </li>
                   <li>
-                    <a v-on:click="">
+                    <a v-on:click="signOut">
                       <span aria-hidden="true" class="glyphicon glyphicon-log-out"></span>
                       退出登录
                     </a>
@@ -87,38 +87,25 @@
 </template>
 <script>
 import axios from 'axios'
+import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
-  data() {
-    return {
-      user: null
-    }
-  },
   computed: {
-    isSignIn() {
-      return this.user != null
-    }
+    ...mapState(['userInfo']),
+    ...mapGetters(['isSignIn']),
   },
-  created() {
-    let userInfo = window.localStorage.getItem('userInfo')
-    if (userInfo) {
-      this.user = JSON.parse(userInfo)
-    } else {
-      let token = window.localStorage.getItem('token')
-      axios.get('/api/user', {
-        headers: { 'Authorization': 'Bearer ' + token },
-        params: { include: 'roles' },
+  methods: {
+    signOut() {
+      axios.delete('/api/authorizations/current', {
+        headers: { 'Authorization': 'Bearer ' + this.$store.state.token },
       }).then((res) => {
-        this.user = res.data
-        window.localStorage.setItem('userInfo', JSON.stringify(res.data))
+        this.$router.push('/')
       }).catch((err) => {
-        console.log(err)
+        this.$router.push('/')
       });
+      this.$store.dispatch('signOut')
     }
   }
 }
 
 </script>
-<style lang="scss" scoped>
-
-
-</style>
