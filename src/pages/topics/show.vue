@@ -87,9 +87,18 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      topic: null,
-      replies: [],
-      repliesPagination: null
+      topic: {
+        id: 0,
+        user_id: 0,
+        user: {},
+      },
+      replies: [
+        {
+          user_id: 0,
+          user: {}
+        }
+      ],
+      repliesPagination: {}
     }
   },
   created() {
