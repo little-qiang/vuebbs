@@ -16,17 +16,10 @@
             <li>
               <router-link to="/topics">话题</router-link>
             </li>
-            <li>
-              <router-link to="/categories/1">分享</router-link>
-            </li>
-            <li>
-              <router-link to="/categories/2">教程</router-link>
-            </li>
-            <li>
-              <router-link to="/categories/3">问答</router-link>
-            </li>
-            <li>
-              <router-link to="/categories/4">公告</router-link>
+            <li v-for="category in categories">
+              <router-link :to="{ name: 'categories.index', params: { catId: category.id} }">
+                {{category.name}}
+              </router-link>
             </li>
           </ul>
         </ul>
@@ -53,12 +46,12 @@
                 </a>
                 <ul role="menu" class="dropdown-menu">
                   <li>
-                    <router-link :to="{ name: 'users', params: { id: userInfo.id }}">
+                    <router-link :to="{ name: 'users.show', params: { id: userInfo.id }}">
                       <span aria-hidden="true" class="glyphicon glyphicon-user"></span> 个人中心
                     </router-link>
                   </li>
                   <li>
-                    <router-link :to="{ name: 'edit', params: { id: userInfo.id }}">
+                    <router-link :to="{ name: 'users.edit', params: { id: userInfo.id }}">
                       <span aria-hidden="true" class="glyphicon glyphicon-edit"></span>编辑资料
                     </router-link>
                   </li>
@@ -73,10 +66,10 @@
             </template>
             <template v-else>
               <li>
-                <router-link to="signin">登录</router-link>
+                <router-link to="/signin">登录</router-link>
               </li>
               <li>
-                <router-link to="signup">注册</router-link>
+                <router-link to="/signup">注册</router-link>
               </li>
             </template>
           </ul>
@@ -91,8 +84,13 @@ import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
 export default {
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['categories', 'userInfo']),
     ...mapGetters(['isSignIn']),
+  },
+  created() {
+    if (!window.localStorage.getItem('categories')) {
+      this.$store.dispatch('getCategories')
+    }
   },
   methods: {
     signOut() {

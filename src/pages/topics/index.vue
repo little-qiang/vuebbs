@@ -1,21 +1,16 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-9 col-md-9 topic-list">
-        <topic-list v-bind="{catId}"></topic-list>
-      </div>
-      <div class="col-lg-3 col-md-3 sidebar">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <a href="http://larabbs.test/topics/create" aria-label="Left Align" class="btn btn-success btn-block">
-              <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span>
-              新建帖子
-            </a>
-          </div>
+  <div class="row">
+    <topic-list></topic-list>
+    <div class="col-lg-3 col-md-3 sidebar">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <router-link :to="{name: 'topics.create'}" aria-label="Left Align" class="btn btn-success btn-block">
+            <span aria-hidden="true" class="glyphicon glyphicon-pencil"></span> 新建帖子
+          </router-link>
         </div>
-        <active-users></active-users>
-        <links></links>
       </div>
+      <active-users></active-users>
+      <links></links>
     </div>
   </div>
 </template>
@@ -25,21 +20,11 @@ import activeUsers from './activeUsers'
 import links from './links'
 
 export default {
-  name: 'topics',
-  data() {
-    return {
-      catId: 0
-    }
-  },
+  name: 'Topics',
   components: {
     topicList,
     activeUsers,
     links
-  },
-  watch: {
-    '$route' (to, from) {
-      this.catId = to.params.catId
-    }
   }
 }
 

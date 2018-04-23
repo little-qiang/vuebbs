@@ -10,12 +10,18 @@ import './assets/js/bootstrap.min'
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
+  let categories = window.localStorage.getItem('categories')
+  if (categories && store.state.categories.length == 0) {
+    store.commit('setCategoies', JSON.parse(categories))
+  }
+
   let token = window.localStorage.getItem('token')
-  let userInfo = window.localStorage.getItem('userInfo')
-  if(token){
+  if (token) {
     store.commit('signIn', token)
   }
-  if(userInfo){
+
+  let userInfo = window.localStorage.getItem('userInfo')
+  if (userInfo) {
     store.commit('setUserInfo', JSON.parse(userInfo))
   }
   next()
@@ -29,4 +35,3 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
-

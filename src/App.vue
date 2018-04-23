@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="root-page">
     <common-header></common-header>
-    <router-view/>
+    <div class="container">
+      <router-view/>
+    </div>
     <common-footer></common-footer>
   </div>
 </template>
@@ -9,15 +11,13 @@
 import commonHeader from '@/pages/layouts/header'
 import commonFooter from '@/pages/layouts/footer'
 
-
 export default {
   name: 'App',
   components: {
     commonHeader,
-    commonFooter
+    commonFooter,
   }
 }
-
 </script>
 <style lang="scss">
 @import "./assets/sass/app";
