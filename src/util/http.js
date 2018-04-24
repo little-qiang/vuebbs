@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+axios.defaults.baseURL = 'http://larabbs.test'
+
 export default {
   get(url, params, config = {}) {
     return new Promise((resolve, reject) => {
