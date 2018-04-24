@@ -12,7 +12,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
   data() {
     return {
@@ -24,9 +23,9 @@ export default {
   },
   methods: {
     renderLinks() {
-      axios.get('/api/links').then((res) => {
+      this.$http.get('/api/links').then((res) => {
         if (res.status == 200) {
-          this.links = res.data.data
+          this.links = res.data
         }
       })
     }

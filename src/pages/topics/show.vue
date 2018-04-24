@@ -83,7 +83,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
   data() {
     return {
@@ -92,12 +91,10 @@ export default {
         user_id: 0,
         user: {},
       },
-      replies: [
-        {
-          user_id: 0,
-          user: {}
-        }
-      ],
+      replies: [{
+        user_id: 0,
+        user: {}
+      }],
       repliesPagination: {}
     }
   },
@@ -108,17 +105,17 @@ export default {
   methods: {
     getTopic() {
       let url = '/api/topics/' + this.$route.params.id + '?include=user'
-      axios.get(url).then(res => {
-        this.topic = res.data
+      this.$http.get(url).then(res => {
+        this.topic = res
       }).catch(err => {
         console.log(err)
       })
     },
     getReplies() {
       let url = '/api/topics/' + this.$route.params.id + '/replies?include=user'
-      axios.get(url).then(res => {
-        this.replies = res.data.data
-        this.repliesPagination = res.data.meta.pagination
+      this.$http.get(url).then(res => {
+        this.replies = res.data
+        this.repliesPagination = res.meta.pagination
       }).catch(err => {
         console.log(err)
       })

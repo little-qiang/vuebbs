@@ -13,7 +13,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import pagination from '../layouts/pagination'
 
 export default {
@@ -44,10 +43,10 @@ export default {
   methods: {
     getTopics() {
       let url = '/api/users/' + this.$route.params.id + '/topics'
-      axios.get(url, { params: this.params }).then(res => {
-        this.topics = res.data.data
-        this.pagination = res.data.meta.pagination
-        this.curPage = res.data.meta.pagination.current_page
+      this.$http.get(url, this.params).then(res => {
+        this.topics = res.data
+        this.pagination = res.meta.pagination
+        this.curPage = res.meta.pagination.current_page
       }).catch((err) => {
         console.log(err)
       })

@@ -56,7 +56,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import pagination from '../layouts/pagination'
 
 export default {
@@ -77,7 +76,7 @@ export default {
     pagination
   },
   computed: {
-    catId: function(){
+    catId: function() {
       return this.$route.params.catId ? this.$route.params.catId : 0
     },
     categoryInfo: function() {
@@ -106,10 +105,10 @@ export default {
   methods: {
     getTopics() {
       let url = '/api/topics'
-      axios.get(url, { params: this.params }).then(res => {
-        this.topics = res.data.data
-        this.pagination = res.data.meta.pagination
-        this.curPage = res.data.meta.pagination.current_page
+      this.$http.get(url, this.params).then(res => {
+        this.topics = res.data
+        this.pagination = res.meta.pagination
+        this.curPage = res.meta.pagination.current_page
       }).catch((err) => {
         console.log(err)
       })

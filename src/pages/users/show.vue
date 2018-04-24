@@ -52,7 +52,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import userTopics from './userTopics'
 import userReplies from './userReplies'
 
@@ -79,8 +78,8 @@ export default {
   methods: {
     getUser() {
       let url = '/api/users/' + this.$route.params.id
-      axios.get(url).then(res => {
-        this.user = res.data
+      this.$http.get(url).then(res => {
+        this.user = res
       }).catch(err => {
         console.log(err)
       })

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import axios from 'axios'
+import $http from '../util/http'
 
 Vue.use(Vuex)
 
@@ -33,17 +33,17 @@ export default new Vuex.Store({
   },
   actions: {
     getCategories({ commit, state }) {
-      axios.get('/api/categories').then(res => {
-        window.localStorage.setItem('categories', JSON.stringify(res.data.data))
-        commit('setCategoies', res.data.data)
+      $http.get('/api/categories').then(res => {
+        window.localStorage.setItem('categories', JSON.stringify(res.data))
+        commit('setCategoies', res.data)
       })
     },
     signIn({ commit, state }, params) {
-      axios.post('/api/authorizations', params).then(res => {
-        commit('signIn', res.data.access_token)
-        commit('setUserInfo', res.data.user_info)
-        window.localStorage.setItem('token', res.data.access_token)
-        window.localStorage.setItem('userInfo', JSON.stringify(res.data.user_info))
+      $http.post('/api/authorizations', params).then(res => {
+        commit('signIn', res.access_token)
+        commit('setUserInfo', res.user_info)
+        window.localStorage.setItem('token', res.access_token)
+        window.localStorage.setItem('userInfo', JSON.stringify(res.user_info))
       }).catch((err) => {
         if (err.response) {
           let errors = err.response.data.errors

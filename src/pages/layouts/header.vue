@@ -79,7 +79,6 @@
   </nav>
 </template>
 <script>
-import axios from 'axios'
 import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
 export default {
@@ -94,7 +93,7 @@ export default {
   },
   methods: {
     signOut() {
-      axios.delete('/api/authorizations/current', {
+      this.$http.delete('/api/authorizations/current', {
         headers: { 'Authorization': 'Bearer ' + this.$store.state.token },
       }).then((res) => {
         this.$router.push('/')

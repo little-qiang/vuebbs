@@ -15,25 +15,24 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
-  data(){
+  data() {
     return {
       users: []
     }
   },
-  created(){
+  created() {
     this.renderUsers()
   },
   methods: {
-    renderUsers(){
-      axios.get('/api/actived/users').then((res) => {
+    renderUsers() {
+      this.$http.get('/api/actived/users').then((res) => {
         if (res.status == 200) {
-          this.users = res.data.data;
+          this.users = res.data;
         }
       })
     }
   }
 }
-</script>
 
+</script>

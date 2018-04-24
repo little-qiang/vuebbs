@@ -53,8 +53,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-
 export default {
   data() {
     return {
@@ -71,18 +69,18 @@ export default {
   },
   methods: {
     getCaptcha() {
-      axios.post('/api/captchas', { phone: this.phone }).then(res => {
-        this.captchaImg = res.data.captcha_image_content
-        this.captchaKey = res.data.captcha_key
+      this.$http.post('/api/captchas', { phone: this.phone }).then(res => {
+        this.captchaImg = res.captcha_image_content
+        this.captchaKey = res.captcha_key
       }).catch((err) => {
         console.log(err);
       })
     },
     verifyCaptchaCode() {
       let params = { captcha_key: this.captchaKey, captcha_code: this.captchaCode }
-      axios.post('/api/verificationCodes', params).then(res => {
+      this.$http.post('/api/verificationCodes', params).then(res => {
         this.step = 2
-        this.smsKey = res.data.key
+        this.smsKey = res.key
       }).catch((err) => {
         console.log(err);
       })
@@ -94,8 +92,8 @@ export default {
         password: this.password,
         name: this.name,
       }
-      axios.post('/api/users', params).then((res) => {
-        this.captchaImg = res.data.captcha_image_content
+      this.$http.post('/api/users', params).then((res) => {
+        this.captchaImg = res.captcha_image_content
       }).catch((err) => {
         console.log(err);
       })
