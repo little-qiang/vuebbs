@@ -24,9 +24,7 @@ export default {
   methods: {
     renderLinks() {
       this.$http.get('/api/links').then((res) => {
-        if (res.status == 200) {
           this.links = res.data
-        }
       })
     }
   }

@@ -27,9 +27,7 @@ export default {
   methods: {
     renderUsers() {
       this.$http.get('/api/actived/users').then((res) => {
-        if (res.status == 200) {
-          this.users = res.data;
-        }
+        this.users = res.data;
       })
     }
   }

@@ -1,6 +1,21 @@
 import axios from 'axios'
+import qs from 'qs'
+
 
 axios.defaults.baseURL = 'http://larabbs.test'
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+// Add a response interceptor
+axios.interceptors.response.use(function(response) {
+  // Do something with response data
+  return response;
+}, function(error) {
+  if(error.response){
+    return Promise.reject(error.response.data);
+  } else {
+    console.log(error)
+  }
+});
 
 export default {
   get(url, params, config = {}) {
@@ -15,7 +30,7 @@ export default {
   },
   post(url, params, config = {}) {
     return new Promise((resolve, reject) => {
-      axios.post(url, params, config).then(res => {
+      axios.post(url, qs.stringify(params), config).then(res => {
         resolve(res.data)
       }).catch(err => {
         reject(err)
@@ -24,7 +39,7 @@ export default {
   },
   put(url, params, config = {}) {
     return new Promise((resolve, reject) => {
-      axios.put(url, params, config).then(res => {
+      axios.put(url, qs.stringify(params), config).then(res => {
         resolve(res.data)
       }).catch(err => {
         reject(err)

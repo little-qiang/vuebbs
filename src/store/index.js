@@ -45,13 +45,14 @@ export default new Vuex.Store({
         window.localStorage.setItem('token', res.access_token)
         window.localStorage.setItem('userInfo', JSON.stringify(res.user_info))
       }).catch((err) => {
-        if (err.response) {
-          let errors = err.response.data.errors
-          console.log(errors)
+        if (err.errors) {
+          let errors = err.errors
           let msg = Object.keys(errors).reduce((carry, k) => {
             return carry + `${k}: ${errors[k].reduce((c, i) => c + i)}\n`
           }, '')
           alert(msg)
+        } else {
+          alert(err.message)
         }
       })
     },
