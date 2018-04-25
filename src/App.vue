@@ -8,8 +8,8 @@
   </div>
 </template>
 <script>
-import commonHeader from '@/pages/layouts/header'
-import commonFooter from '@/pages/layouts/footer'
+import commonHeader from './layouts/header'
+import commonFooter from './layouts/footer'
 
 export default {
   name: 'App',

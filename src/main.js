@@ -4,7 +4,7 @@ import Vue from 'vue'
 import store from './store'
 import App from './App'
 import router from './router'
-import http from './util/http'
+import http from './plugins/http'
 
 import './assets/js/bootstrap.min'
 

@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import pagination from '../layouts/pagination'
+import pagination from '../../components/pagination'
 
 export default {
   name: 'userTopics',
